@@ -12,9 +12,8 @@ import (
 const Null = "N/A"
 
 var (
-	ErrInvalidIp     = errors.New("Invalid ip format")
-	NullLocationInfo = &LocationInfo{Null, Null, Null, Null}
-	std              *Locator
+	ErrInvalidIp = errors.New("Invalid ip format")
+	std          *Locator
 )
 
 func Init(dataFile string) (err error) {
@@ -84,16 +83,30 @@ func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 }
 
 func (loc *Locator) FindByUint(ip uint32) (info *LocationInfo) {
-	for start := loc.index[ip>>24]<<3 + 1024; start < loc.maxCompLen; start += 8 {
-		if binary.BigEndian.Uint32(loc.indexData[start:start+4]) >= ip {
-			ioff := uint32(loc.indexData[start+4]) |
-				uint32(loc.indexData[start+5])<<8 |
-				uint32(loc.indexData[start+6])<<16
-			ioff += loc.offset - 1024
-			return newLocationInfo(loc.data[ioff : ioff+uint32(loc.indexData[start+7])])
+	ioff := loc.findIndexOffset(ip, loc.index[ip>>24]<<3+1024)
+	off := uint32(loc.indexData[ioff+4]) |
+		uint32(loc.indexData[ioff+5])<<8 |
+		uint32(loc.indexData[ioff+6])<<16
+	off += loc.offset - 1024
+	return newLocationInfo(loc.data[off : off+uint32(loc.indexData[ioff+7])])
+}
+
+// binary search
+func (loc *Locator) findIndexOffset(ip, start uint32) uint32 {
+	end := loc.maxCompLen
+	for start < end {
+		mid := (start/8 + end/8) / 2 * 8
+		if ip > binary.BigEndian.Uint32(loc.indexData[mid:mid+4]) {
+			start = mid + 8
+		} else {
+			end = mid
 		}
 	}
-	return NullLocationInfo
+
+	if binary.BigEndian.Uint32(loc.indexData[end:end+4]) >= ip {
+		return end
+	}
+	return start
 }
 
 func (loc *Locator) init(data []byte) {

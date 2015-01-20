@@ -39,8 +39,8 @@ func TestFind(t *testing.T) {
 // Benchmark command
 //	go test -bench=Find
 // Benchmark result
-//	BenchmarkFind 1000000      1930 ns/op
-// about 51w/s
+//	BenchmarkFind 2000000       916 ns/op
+// about 110w/s
 func BenchmarkFind(b *testing.B) {
 	b.StopTimer()
 	if err := Init(data); err != nil {
