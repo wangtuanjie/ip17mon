@@ -18,7 +18,7 @@ func stdin() {
 	for scanner.Scan() {
 		ip := scanner.Text()
 		if loc, err := ip17mon.Find(ip); err != nil {
-			fmt.Fprintf(os.Stdout, "%s: %v\n", ip, err)
+			fmt.Fprintf(os.Stderr, "%s: %v\n", ip, err)
 		} else {
 			fmt.Println(ip, loc.Country, loc.Region, loc.City, loc.Isp)
 		}
@@ -35,7 +35,7 @@ func stdin() {
 func main() {
 	if len(os.Args) > 1 {
 		if loc, err := ip17mon.Find(os.Args[1]); err != nil {
-			fmt.Fprintf(os.Stdout, "%s: %v\n", os.Args[1], err)
+			fmt.Fprintf(os.Stderr, "%s: %v\n", os.Args[1], err)
 			os.Exit(1)
 		} else {
 			fmt.Println(loc.Country, loc.Region, loc.City, loc.Isp)

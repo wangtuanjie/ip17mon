@@ -97,7 +97,6 @@ func (loc *Locator) FindByUint(ip uint32) (info *LocationInfo) {
 }
 
 func (loc *Locator) init(data []byte) {
-
 	loc.data = data
 	loc.offset = binary.BigEndian.Uint32(data[:4])
 	loc.indexData = data[4:loc.offset]
@@ -107,7 +106,6 @@ func (loc *Locator) init(data []byte) {
 	for i := 0; i < 256; i++ {
 		loc.index[i] = binary.LittleEndian.Uint32(loc.indexData[i*4 : i*4+4])
 	}
-
 	return
 }
 
