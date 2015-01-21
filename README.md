@@ -17,7 +17,9 @@
 	）
 
 	func init() {
-		ip17mon.Init("your data file")
+		if err := ip17mon.Init("your data file"); err != nil {
+			panic(err)
+		}
 	}
 
 	func main() {
