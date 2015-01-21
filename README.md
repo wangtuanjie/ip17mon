@@ -1,4 +1,4 @@
-[17mon](http://http://www.ipip.net/) IP location data for Golang
+[17mon](http://www.ipip.net/) IP location data for Golang
 ===
 
 ## 特性
