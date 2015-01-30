@@ -25,7 +25,7 @@ func TestFind(t *testing.T) {
 		t.Fatal("region expect = 浙江, but actual =", info.Region)
 	}
 
-	if info.City != Null {
+	if info.City != "嘉兴" {
 		t.Fatal("city expect = Null, but actual =", info.City)
 	}
 
@@ -39,8 +39,8 @@ func TestFind(t *testing.T) {
 // Benchmark command
 //	go test -bench=Find
 // Benchmark result
-//	BenchmarkFind 2000000       916 ns/op
-// about 110w/s
+//	BenchmarkFind 2000000       830 ns/op
+// about 120w/s
 func BenchmarkFind(b *testing.B) {
 	b.StopTimer()
 	if err := Init(data); err != nil {

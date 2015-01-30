@@ -12,7 +12,7 @@ import (
 const Null = "N/A"
 
 var (
-	ErrInvalidIp = errors.New("Invalid ip format")
+	ErrInvalidIp = errors.New("invalid ip format")
 	std          *Locator
 )
 
@@ -58,11 +58,11 @@ func NewLocatorWithData(data []byte) (loc *Locator) {
 }
 
 type Locator struct {
-	data       []byte
-	indexData  []byte
-	index      []uint32
-	offset     uint32
-	maxCompLen uint32
+	textData   []byte
+	indexData1 []uint32
+	indexData2 []int
+	indexData3 []int
+	index      []int
 }
 
 type LocationInfo struct {
@@ -83,41 +83,52 @@ func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 }
 
 func (loc *Locator) FindByUint(ip uint32) (info *LocationInfo) {
-	ioff := loc.findIndexOffset(ip, loc.index[ip>>24]<<3+1024)
-	off := uint32(loc.indexData[ioff+4]) |
-		uint32(loc.indexData[ioff+5])<<8 |
-		uint32(loc.indexData[ioff+6])<<16
-	off += loc.offset - 1024
-	return newLocationInfo(loc.data[off : off+uint32(loc.indexData[ioff+7])])
+	idx := loc.findIndexOffset(ip, loc.index[ip>>24])
+	off := loc.indexData2[idx]
+	return newLocationInfo(loc.textData[off : off+loc.indexData3[idx]])
 }
 
 // binary search
-func (loc *Locator) findIndexOffset(ip, start uint32) uint32 {
-	end := loc.maxCompLen
+func (loc *Locator) findIndexOffset(ip uint32, start int) int {
+	end := len(loc.indexData1) - 1
 	for start < end {
-		mid := (start/8 + end/8) / 2 * 8
-		if ip > binary.BigEndian.Uint32(loc.indexData[mid:mid+4]) {
-			start = mid + 8
+		mid := (start + end) / 2
+		if ip > loc.indexData1[mid] {
+			start = mid + 1
 		} else {
 			end = mid
 		}
 	}
 
-	if binary.BigEndian.Uint32(loc.indexData[end:end+4]) >= ip {
+	if loc.indexData1[end] >= ip {
 		return end
 	}
+
 	return start
 }
 
 func (loc *Locator) init(data []byte) {
-	loc.data = data
-	loc.offset = binary.BigEndian.Uint32(data[:4])
-	loc.indexData = data[4:loc.offset]
-	loc.maxCompLen = loc.offset - 1028
-	loc.index = make([]uint32, 256)
+	textoff := int(binary.BigEndian.Uint32(data[:4]))
 
+	loc.textData = data[textoff-1024:]
+
+	loc.index = make([]int, 256)
 	for i := 0; i < 256; i++ {
-		loc.index[i] = binary.LittleEndian.Uint32(loc.indexData[i*4 : i*4+4])
+		off := 4 + i*4
+		loc.index[i] = int(binary.LittleEndian.Uint32(data[off : off+4]))
+	}
+
+	nidx := (textoff - 4 - 1024 - 1024) / 8
+
+	loc.indexData1 = make([]uint32, nidx)
+	loc.indexData2 = make([]int, nidx)
+	loc.indexData3 = make([]int, nidx)
+
+	for i := 0; i < nidx; i++ {
+		off := 4 + 1024 + i*8
+		loc.indexData1[i] = binary.BigEndian.Uint32(data[off : off+4])
+		loc.indexData2[i] = int(uint32(data[off+4]) | uint32(data[off+5])<<8 | uint32(data[off+6])<<16)
+		loc.indexData3[i] = int(data[off+7])
 	}
 	return
 }
