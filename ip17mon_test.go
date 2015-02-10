@@ -26,7 +26,7 @@ func TestFind(t *testing.T) {
 	}
 
 	if info.City != "嘉兴" {
-		t.Fatal("city expect = Null, but actual =", info.City)
+		t.Fatal("city expect = 嘉兴, but actual =", info.City)
 	}
 
 	if info.Isp != "电信" {

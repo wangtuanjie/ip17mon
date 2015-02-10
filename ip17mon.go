@@ -154,7 +154,7 @@ func newLocationInfo(str []byte) *LocationInfo {
 	if len(info.City) == 0 {
 		info.City = Null
 	}
-	if idx := strings.IndexAny(info.Isp, "/"); idx != -1 {
+	if idx := strings.Index(info.Isp, "/"); idx != -1 {
 		info.Isp = info.Isp[:idx]
 	}
 	if len(info.Isp) == 0 {
