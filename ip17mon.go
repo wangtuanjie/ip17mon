@@ -6,7 +6,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net"
-	"strings"
 )
 
 const Null = "N/A"
@@ -153,9 +152,6 @@ func newLocationInfo(str []byte) *LocationInfo {
 	}
 	if len(info.City) == 0 {
 		info.City = Null
-	}
-	if idx := strings.Index(info.Isp, "/"); idx != -1 {
-		info.Isp = info.Isp[:idx]
 	}
 	if len(info.Isp) == 0 {
 		info.Isp = Null
