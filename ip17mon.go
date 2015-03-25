@@ -83,8 +83,8 @@ func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 
 func (loc *Locator) FindByUint(ip uint32) (info *LocationInfo) {
 	end := len(loc.indexData1) - 1
-	if ip >> 24 != 0xff {
-		end = loc.index[ip>>24+1]
+	if ip>>24 != 0xff {
+		end = loc.index[(ip>>24)+1]
 	}
 	idx := loc.findIndexOffset(ip, loc.index[ip>>24], end)
 	off := loc.indexData2[idx]
