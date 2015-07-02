@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-const data = "/Users/unite/Downloads/mydata4vipweek2.dat"
+const data = "17monipdb.dat"
 
 func TestFind(t *testing.T) {
 	if err := Init(data); err != nil {
@@ -27,10 +27,6 @@ func TestFind(t *testing.T) {
 
 	if info.City != "嘉兴" {
 		t.Fatal("city expect = 嘉兴, but actual =", info.City)
-	}
-
-	if info.Isp != "电信" {
-		t.Fatal("isp expect = 电信, but actual =", info.Isp)
 	}
 }
 
