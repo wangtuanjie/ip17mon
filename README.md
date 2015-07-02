@@ -1,6 +1,8 @@
 [17mon](http://www.ipip.net/) IP location data for Golang
 ===
 
+[![Circle CI](https://circleci.com/gh/wangtuanjie/ip17mon.svg?style=svg)](https://circleci.com/gh/wangtuanjie/ip17mon)
+
 ## 特性
 * 高效的查找算法，查询性能100w/s
 * 支持build出的bin文件包含原始数据
