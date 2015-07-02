@@ -15,6 +15,7 @@ var (
 	std          *Locator
 )
 
+// Init defaut locator with dataFile
 func Init(dataFile string) (err error) {
 	if std != nil {
 		return
@@ -23,6 +24,7 @@ func Init(dataFile string) (err error) {
 	return
 }
 
+// Init defaut locator with data
 func InitWithData(data []byte) {
 	if std != nil {
 		return
@@ -31,16 +33,20 @@ func InitWithData(data []byte) {
 	return
 }
 
+// Find locationInfo by ip string
+// It will return err when ipstr is not a valid format
 func Find(ipstr string) (*LocationInfo, error) {
 	return std.Find(ipstr)
 }
 
+// Find locationInfo by uint32
 func FindByUint(ip uint32) *LocationInfo {
 	return std.FindByUint(ip)
 }
 
 //-----------------------------------------------------------------------------
 
+// New locator with dataFile
 func NewLocator(dataFile string) (loc *Locator, err error) {
 	data, err := ioutil.ReadFile(dataFile)
 	if err != nil {
@@ -50,6 +56,7 @@ func NewLocator(dataFile string) (loc *Locator, err error) {
 	return
 }
 
+// New locator with data
 func NewLocatorWithData(data []byte) (loc *Locator) {
 	loc = new(Locator)
 	loc.init(data)
@@ -71,6 +78,8 @@ type LocationInfo struct {
 	Isp     string
 }
 
+// Find locationInfo by ip string
+// It will return err when ipstr is not a valid format
 func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 	ip := net.ParseIP(ipstr)
 	if ip == nil {
@@ -81,6 +90,7 @@ func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 	return
 }
 
+// Find locationInfo by uint32
 func (loc *Locator) FindByUint(ip uint32) (info *LocationInfo) {
 	end := len(loc.indexData1) - 1
 	if ip>>24 != 0xff {
@@ -136,23 +146,27 @@ func (loc *Locator) init(data []byte) {
 }
 
 func newLocationInfo(str []byte) *LocationInfo {
+
 	var info *LocationInfo
+
 	fields := bytes.Split(str, []byte("\t"))
-	if len(fields) == 4 {
+	switch len(fields) {
+	case 4:
+		// free version
 		info = &LocationInfo{
 			Country: string(fields[0]),
 			Region:  string(fields[1]),
 			City:    string(fields[2]),
-			Isp:     string("1"),
 		}
-	} else if len(fields) == 5 {
+	case 5:
+		// pay version
 		info = &LocationInfo{
 			Country: string(fields[0]),
 			Region:  string(fields[1]),
 			City:    string(fields[2]),
-			Isp:     string(fields[3]),
+			Isp:     string(fields[4]),
 		}
-	} else {
+	default:
 		panic("unexpected ip info:" + string(str))
 	}
 

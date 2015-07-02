@@ -13,6 +13,7 @@ func TestFind(t *testing.T) {
 		t.Fatal("Init failed:", err)
 	}
 	info, err := Find("115.231.237.124")
+
 	if err != nil {
 		t.Fatal("Find failed:", err)
 	}
@@ -27,6 +28,10 @@ func TestFind(t *testing.T) {
 
 	if info.City != "嘉兴" {
 		t.Fatal("city expect = 嘉兴, but actual =", info.City)
+	}
+
+	if info.Isp != Null {
+		t.Fatal("isp expect = Null, but actual =", info.Isp)
 	}
 }
 
