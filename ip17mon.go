@@ -136,15 +136,24 @@ func (loc *Locator) init(data []byte) {
 }
 
 func newLocationInfo(str []byte) *LocationInfo {
+	var info *LocationInfo
 	fields := bytes.Split(str, []byte("\t"))
-	if len(fields) != 5 {
+	if len(fields) == 4 {
+		info = &LocationInfo{
+			Country: string(fields[0]),
+			Region:  string(fields[1]),
+			City:    string(fields[2]),
+			Isp:     string("1"),
+		}
+	} else if len(fields) == 5 {
+		info = &LocationInfo{
+			Country: string(fields[0]),
+			Region:  string(fields[1]),
+			City:    string(fields[2]),
+			Isp:     string(fields[3]),
+		}
+	} else {
 		panic("unexpected ip info:" + string(str))
-	}
-	info := &LocationInfo{
-		Country: string(fields[0]),
-		Region:  string(fields[1]),
-		City:    string(fields[2]),
-		Isp:     string(fields[4]),
 	}
 
 	if len(info.Country) == 0 {
