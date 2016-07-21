@@ -86,7 +86,7 @@ func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 		err = ErrInvalidIp
 		return
 	}
-	info = loc.FindByUint(binary.BigEndian.Uint32([]byte(ip))
+	info = loc.FindByUint(binary.BigEndian.Uint32([]byte(ip)))
 	return
 }
 
