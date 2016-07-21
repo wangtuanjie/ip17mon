@@ -81,12 +81,12 @@ type LocationInfo struct {
 // Find locationInfo by ip string
 // It will return err when ipstr is not a valid format
 func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
-	ip := net.ParseIP(ipstr)
+	ip := net.ParseIP(ipstr).To4()
 	if ip == nil {
 		err = ErrInvalidIp
 		return
 	}
-	info = loc.FindByUint(binary.BigEndian.Uint32([]byte(ip.To4())))
+	info = loc.FindByUint(binary.BigEndian.Uint32([]byte(ip)))
 	return
 }
 
