@@ -82,7 +82,7 @@ type LocationInfo struct {
 // It will return err when ipstr is not a valid format
 func (loc *Locator) Find(ipstr string) (info *LocationInfo, err error) {
 	ip := net.ParseIP(ipstr).To4()
-	if ip == nil {
+	if ip == nil || ip.To4() == nil {
 		err = ErrInvalidIp
 		return
 	}
