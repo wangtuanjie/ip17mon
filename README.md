@@ -9,7 +9,7 @@
 
 ## 安装
 
-	go get -u github.com/wangtuanjie/ip17mon
+	go get github.com/wangtuanjie/ip17mon@latest
 
 
 ## 使用
