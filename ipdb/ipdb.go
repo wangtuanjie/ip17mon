@@ -74,7 +74,7 @@ func (l *locator) Find(ipstr string) (*LocationInfo, error) {
 		if node > l.md.NodeCount {
 			return l.newLocationInfo(node), nil
 		}
-		node = l.nextNode(node, uint32(((0xFF&int(ip[i>>3]))>>uint(7-(i%8)))&1))
+		node = l.nextNode(node, ((0xFF&int(ip[i>>3]))>>uint(7-(i%8)))&1 == 1)
 	}
 
 	return nil, ErrUnsupportedIP
@@ -93,9 +93,9 @@ func (l *locator) init(b []byte) error {
 	var node uint32
 	for i := 0; i < 96 && node < l.md.NodeCount; i++ {
 		if i >= 80 {
-			node = l.nextNode(node, 1)
+			node = l.nextNode(node, true)
 		} else {
-			node = l.nextNode(node, 0)
+			node = l.nextNode(node, false)
 		}
 	}
 	l.v4Offset = node
@@ -121,9 +121,12 @@ func (l *locator) init(b []byte) error {
 	return nil
 }
 
-func (l *locator) nextNode(node, index uint32) uint32 {
+func (l *locator) nextNode(node uint32, right bool) uint32 {
 
-	off := node*8 + index*4
+	off := node * 8
+	if right {
+		off += 4
+	}
 	return binary.BigEndian.Uint32(l.data[off : off+4])
 }
 
