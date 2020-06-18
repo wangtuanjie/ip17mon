@@ -4,8 +4,8 @@
 [![Circle CI](https://circleci.com/gh/wangtuanjie/ip17mon.svg?style=svg)](https://circleci.com/gh/wangtuanjie/ip17mon)
 
 ## 特性
-* 高效的查找算法，查询性能100w/s
-* 支持build出的bin文件包含原始数据
+
+支持 dat/datx/ipdb 三种格式
 
 ## 安装
 
@@ -19,9 +19,7 @@
 	）
 
 	func init() {
-		if err := ip17mon.Init("your data file"); err != nil {
-			panic(err)
-		}
+		ip17mon.Init("your data file")
 	}
 
 	func main() {
@@ -33,7 +31,7 @@
 		fmt.Println(loc)
 	}
 
-更多请参考[example](https://github.com/wangtuanjie/ip17mon/tree/master/example/qip)
+更多请参考[example](https://github.com/wangtuanjie/ip17mon/tree/master/cmd/qip)
 
 
 

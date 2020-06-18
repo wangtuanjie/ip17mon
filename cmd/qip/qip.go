@@ -2,15 +2,12 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 
 	"github.com/wangtuanjie/ip17mon"
 )
-
-func init() {
-	ip17mon.InitWithData(data)
-}
 
 func stdin() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -33,9 +30,15 @@ func stdin() {
 }
 
 func main() {
-	if len(os.Args) > 1 {
-		if loc, err := ip17mon.Find(os.Args[1]); err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %v\n", os.Args[1], err)
+
+	f := flag.String("f", "ipip_12_7.datx", "ip data file support dat/datx/ipdb format")
+	flag.Parse()
+
+	ip17mon.Init(*f)
+
+	if args := flag.Args(); len(args) > 0 {
+		if loc, err := ip17mon.Find(args[0]); err != nil {
+			fmt.Fprintf(os.Stderr, "%s: %v\n", args[0], err)
 			os.Exit(1)
 		} else {
 			fmt.Println(loc.Country, loc.Region, loc.City, loc.Isp)
