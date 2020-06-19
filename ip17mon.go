@@ -33,7 +33,6 @@ func InitWithDatx(b []byte) {
 func InitWithIpdb(b []byte) {
 	var err error
 	def, err = ipdb.NewWith(b)
-	println(def)
 	if err != nil {
 		panic(err)
 	}
