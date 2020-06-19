@@ -7,7 +7,6 @@ import (
 
 	"github.com/wangtuanjie/ip17mon/datx"
 	"github.com/wangtuanjie/ip17mon/ipdb"
-
 	"github.com/wangtuanjie/ip17mon/internal/proto"
 )
 
