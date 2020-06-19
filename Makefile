@@ -1,10 +1,8 @@
-all: test bench build
+all: test build
 
 test:
 	go test -v -race ./...
 
 build:
-	@cd example/qip && bash build.sh && mv qip ../../
+	go build ./...
 
-bench:
-	go test -bench=Find .
