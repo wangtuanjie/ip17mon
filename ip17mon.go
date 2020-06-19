@@ -1,16 +1,22 @@
 package ip17mon
 
 import (
+	"errors"
 	"path/filepath"
 	"strings"
 
 	"github.com/wangtuanjie/ip17mon/datx"
 	"github.com/wangtuanjie/ip17mon/ipdb"
 
-	. "github.com/wangtuanjie/ip17mon/internal/proto"
+	"github.com/wangtuanjie/ip17mon/internal/proto"
 )
 
 var def Locator
+
+type (
+	Locator      = proto.Locator
+	LocationInfo = proto.LocationInfo
+)
 
 func Init(dataFile string) {
 	var err error
@@ -45,6 +51,6 @@ func New(dataFile string) (loc Locator, err error) {
 	case ".ipdb":
 		return ipdb.New(dataFile)
 	default:
-		return nil, ErrUnsupportedFile
+		return nil, errors.New("unsupported file")
 	}
 }
