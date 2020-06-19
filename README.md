@@ -5,7 +5,8 @@
 
 ## 特性
 
-支持 dat/datx/ipdb 三种格式
+* dat/datx 只支持 ipv4 
+* ipdb 支持 ipv4/ipv6
 
 ## 安装
 
