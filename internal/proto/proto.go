@@ -13,9 +13,6 @@ type Locator interface {
 	Find(ipstr string) (*LocationInfo, error)
 }
 
-var (
-	ErrUnsupportedIP   = errors.New("unsupported ip format")
-	ErrUnsupportedFile = errors.New("unsupported file")
-)
+var ErrUnsupportedIP = errors.New("unsupported ip format")
 
 const Null = "N/A"
